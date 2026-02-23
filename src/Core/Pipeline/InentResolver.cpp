@@ -1,11 +1,14 @@
 #include "IntentResolver.hpp"
 
+#include <cassert>
+
 #include "Core/World.hpp"
 
 namespace sw::core::pipeline
 {
-	void IntentResolver::resolve(World& world)
+	bool IntentResolver::resolve(World& world)
 	{
+        bool executed = false;
         while (!intentQueue.empty())
         {
             auto current = intentQueue.front();
@@ -21,16 +24,20 @@ namespace sw::core::pipeline
             if (current->getCancelled()) continue;
 
             // 2. EXECUTE
-            if (hooks.executor) hooks.executor(world, *current);
+            assert(hooks.executor);
+            hooks.executor(world, *current);
+            executed = true;
 
             // 3. POST-PROCESS
             for (auto& hook : hooks.post) hook(world, *current);
         }
+
+        return executed;
 	}
 
-	void IntentResolver::resolve(World& world, std::shared_ptr<pipeline::Intent> intent)
+	bool IntentResolver::resolve(World& world, std::shared_ptr<pipeline::Intent> intent)
 	{
 		emit(intent);
-		resolve(world);
+		return resolve(world);
 	}
 }

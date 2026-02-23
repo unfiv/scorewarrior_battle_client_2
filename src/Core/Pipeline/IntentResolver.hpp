@@ -19,6 +19,9 @@ namespace sw::core::pipeline
     {
         using Handler = std::function<void(World&, pipeline::Intent&)>;
 
+        template<typename T>
+        using IntentFunc = std::function<void(World&, T&)>;
+
         struct Hooks
         {
             std::vector<Handler> pre;
@@ -29,24 +32,23 @@ namespace sw::core::pipeline
         std::unordered_map<std::type_index, Hooks> registry;
 
     public:
-        void resolve(World& world);
-        void resolve(World& world, std::shared_ptr<Intent> intent);
+        bool resolve(World& world);
+        bool resolve(World& world, std::shared_ptr<Intent> intent);
 
         template<typename TIntent>
-        void setExecutor(std::function<void(World&, TIntent&)> func)
+        void setExecutor(IntentFunc<TIntent> func)
         {
-            registry[std::type_index(typeid(TIntent))].executor = 
-                [func](World& w, pipeline::Intent& i)
-                {
-                    func(w, static_cast<TIntent&>(i));
-                };
+            registry[std::type_index(typeid(TIntent))].executor = [func](World& w, pipeline::Intent& i) -> void
+            {
+                func(w, static_cast<TIntent&>(i));
+            };
         }
 
         template<typename TIntent>
-        void subscribe(std::function<void(World&, TIntent&)> func, bool isPost = true)
+        void subscribe(IntentFunc<TIntent> func, bool isPost = true)
         {
             auto& hooks = registry[std::type_index(typeid(TIntent))];
-            auto wrapper = [func](World& w, pipeline::Intent& i)
+            auto wrapper = [func](World& w, pipeline::Intent& i) -> void
             {
                 func(w, static_cast<TIntent&>(i));
             };
@@ -55,10 +57,10 @@ namespace sw::core::pipeline
         }
 
         
-        void emit(std::shared_ptr<pipeline::Intent> intent) { intentQueue.push(intent); }
+        void emit(std::shared_ptr<Intent> intent) { intentQueue.push(intent); }
 
     private:
         // TODO: should we store data?
-        std::queue<std::shared_ptr<pipeline::Intent>> intentQueue;
+        std::queue<std::shared_ptr<Intent>> intentQueue;
     };
 }
