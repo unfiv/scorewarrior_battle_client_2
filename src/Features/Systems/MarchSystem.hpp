@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cstdint>
 #include <cmath>
 #include <memory>
 #include <vector>
@@ -16,26 +17,119 @@
 
 namespace sw::features::systems::MarchSystem
 {
-    static bool isPassable(core::World& world, core::domain::Position pos)
+    static std::vector<core::domain::Position> getOccupiedCells(core::World& world, uint32_t unitId, core::domain::Position anchor)
     {
-        if (pos.x >= world.map.width || pos.y >= world.map.height)
-        {
-            return false;
-        }
+        std::vector<core::domain::Position> cells;
 
         const auto& occupiers = world.getComponent<domain::PositionOccupier>();
-        const auto& positions = world.getComponent<core::domain::Position>();
-
-        for (const auto& [id, _] : occupiers)
+        auto occupierIt = occupiers.find(unitId);
+        if (occupierIt == occupiers.end())
         {
-            auto positionIt = positions.find(id);
-            if (positionIt != positions.end() && positionIt->second == pos)
+            cells.push_back(anchor);
+            return cells;
+        }
+
+        for (const auto& offset : occupierIt->second.offsets)
+        {
+            int64_t cellX = static_cast<int64_t>(anchor.x) + static_cast<int64_t>(offset.x);
+            int64_t cellY = static_cast<int64_t>(anchor.y) + static_cast<int64_t>(offset.y);
+            if (cellX < 0 || cellY < 0)
+            {
+                continue;
+            }
+
+            cells.push_back({static_cast<uint32_t>(cellX), static_cast<uint32_t>(cellY)});
+        }
+
+        if (cells.empty())
+        {
+            cells.push_back(anchor);
+        }
+
+        return cells;
+    }
+
+    static std::vector<core::domain::Position> getOccupiedCells(core::World& world, uint32_t unitId)
+    {
+        const auto& positions = world.getComponent<core::domain::Position>();
+        auto positionIt = positions.find(unitId);
+        if (positionIt == positions.end())
+        {
+            return {};
+        }
+
+        return getOccupiedCells(world, unitId, positionIt->second);
+    }
+
+    static bool isPassable(core::World& world, uint32_t unitId, core::domain::Position pos)
+    {
+        auto nextCells = getOccupiedCells(world, unitId, pos);
+        for (const auto& cell : nextCells)
+        {
+            if (cell.x >= world.map.width || cell.y >= world.map.height)
             {
                 return false;
             }
         }
 
+        const auto& occupiers = world.getComponent<domain::PositionOccupier>();
+        for (const auto& [otherId, _] : occupiers)
+        {
+            if (otherId == unitId)
+            {
+                continue;
+            }
+
+            auto otherCells = getOccupiedCells(world, otherId);
+            for (const auto& nextCell : nextCells)
+            {
+                if (std::find(otherCells.begin(), otherCells.end(), nextCell) != otherCells.end())
+                {
+                    return false;
+                }
+            }
+        }
+
         return true;
+    }
+
+    static bool areCellsNeighbors(core::domain::Position lhs, core::domain::Position rhs)
+    {
+        return std::abs(static_cast<int>(lhs.x) - static_cast<int>(rhs.x)) <= 1 &&
+               std::abs(static_cast<int>(lhs.y) - static_cast<int>(rhs.y)) <= 1;
+    }
+
+    static void findTargets(core::World& world, uint32_t selfId, std::vector<uint32_t>& out)
+    {
+        const auto& occupiers = world.getComponent<domain::PositionOccupier>();
+        auto selfCells = getOccupiedCells(world, selfId);
+
+        for (const auto& [id, _] : occupiers)
+        {
+            if (id == selfId)
+            {
+                continue;
+            }
+
+            auto targetCells = getOccupiedCells(world, id);
+            bool isNeighbor = false;
+            for (const auto& selfCell : selfCells)
+            {
+                if (std::any_of(targetCells.begin(), targetCells.end(), [&](const auto& targetCell)
+                {
+                    return areCellsNeighbors(selfCell, targetCell);
+                }))
+                {
+                    isNeighbor = true;
+                    break;
+                }
+            }
+
+            if (isNeighbor)
+            {
+                out.push_back(id);
+            }
+        }
     }
 
     static core::domain::Position getNextStep(core::domain::Position current, core::domain::Position target)
@@ -49,33 +143,6 @@ namespace sw::features::systems::MarchSystem
         else if (target.y > current.y) next.y += 1;
 
         return next;
-    }
-
-    static void findTargets(core::World& world, uint32_t selfId, core::domain::Position center, std::vector<uint32_t>& out)
-    {
-        const auto& occupiers = world.getComponent<domain::PositionOccupier>();
-        const auto& positions = world.getComponent<core::domain::Position>();
-
-        for (const auto& [id, _] : occupiers)
-        {
-            if (id == selfId)
-            {
-                continue;
-            }
-
-            auto positionIt = positions.find(id);
-            if (positionIt == positions.end())
-            {
-                continue;
-            }
-
-            const auto& pos = positionIt->second;
-            if (std::abs(static_cast<int>(pos.x) - static_cast<int>(center.x)) <= 1 &&
-                std::abs(static_cast<int>(pos.y) - static_cast<int>(center.y)) <= 1)
-            {
-                out.push_back(id);
-            }
-        }
     }
 
     static std::shared_ptr<intents::MarchIntent> plan(core::World& world, uint32_t unitId)
@@ -95,9 +162,14 @@ namespace sw::features::systems::MarchSystem
         }
 
         const auto currentPos = currentIt->second;
+        if (currentPos == targetIt->second.position)
+        {
+            return nullptr;
+        }
+
         const auto nextPos = getNextStep(currentPos, targetIt->second.position);
 
-        if (isPassable(world, nextPos))
+        if (isPassable(world, unitId, nextPos))
         {
             return std::make_shared<intents::MarchIntent>(unitId, currentPos, nextPos);
         }

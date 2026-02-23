@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <random>
 #include <vector>
 
@@ -43,10 +44,8 @@ namespace sw::features::systems
                 return nullptr;
             }
 
-            auto attackerPos = positionIt->second;
-
             std::vector<uint32_t> neighbors;
-            MarchSystem::findTargets(world, attackerId, attackerPos, neighbors);
+            MarchSystem::findTargets(world, attackerId, neighbors);
             for (uint32_t id : neighbors)
             {
                 if (healthMap.count(id) && healthMap[id].hp > 0)
@@ -56,7 +55,7 @@ namespace sw::features::systems
             }
 
             std::vector<uint32_t> targets;
-            for (const auto& [targetId, targetPos] : positions)
+            for (const auto& [targetId, _] : positions)
             {
                 if (targetId == attackerId) continue;
                 if (!healthMap.count(targetId) || healthMap[targetId].hp == 0) continue;
@@ -67,7 +66,7 @@ namespace sw::features::systems
                 int effectiveMaxRange = std::max(0, static_cast<int>(rangedMap[attackerId].range) + targetRangedAttackable.maxRangeModifier);
                 if (effectiveMaxRange < effectiveMinRange) continue;
 
-                int dist = static_cast<int>(chebyshevDistance(attackerPos, targetPos));
+                int dist = static_cast<int>(distanceBetweenUnits(world, attackerId, targetId));
                 if (dist >= effectiveMinRange && dist <= effectiveMaxRange)
                 {
                     targets.push_back(targetId);
@@ -120,6 +119,29 @@ namespace sw::features::systems
             }
         }
 
+
+
+        static uint32_t distanceBetweenUnits(core::World& world, uint32_t lhsId, uint32_t rhsId)
+        {
+            auto lhsCells = MarchSystem::getOccupiedCells(world, lhsId);
+            auto rhsCells = MarchSystem::getOccupiedCells(world, rhsId);
+
+            if (lhsCells.empty() || rhsCells.empty())
+            {
+                return 0;
+            }
+
+            uint32_t minDistance = std::numeric_limits<uint32_t>::max();
+            for (const auto& lhsCell : lhsCells)
+            {
+                for (const auto& rhsCell : rhsCells)
+                {
+                    minDistance = std::min(minDistance, chebyshevDistance(lhsCell, rhsCell));
+                }
+            }
+
+            return minDistance;
+        }
         static uint32_t chebyshevDistance(core::domain::Position lhs, core::domain::Position rhs)
         {
             auto dx = std::abs(static_cast<int>(lhs.x) - static_cast<int>(rhs.x));

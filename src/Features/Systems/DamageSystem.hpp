@@ -8,7 +8,7 @@
 
 namespace sw::features::systems::DamageSystem
 {
-    static void apply(core::World& world, intents::DamageIntent& intent)
+    static void execute(core::World& world, intents::DamageIntent& intent)
     {
         auto& healthMap = world.getComponent<domain::Health>();
         auto target = healthMap.find(intent.targetId);

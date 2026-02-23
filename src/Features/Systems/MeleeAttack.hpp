@@ -42,9 +42,8 @@ namespace sw::features::systems
                 return nullptr;
             }
 
-            auto attackerPos = positionIt->second;
             std::vector<uint32_t> targets;
-            MarchSystem::findTargets(world, attackerId, attackerPos, targets);
+            MarchSystem::findTargets(world, attackerId, targets);
 
             std::vector<uint32_t> aliveTargets;
             for (uint32_t id : targets)

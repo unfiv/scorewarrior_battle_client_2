@@ -71,7 +71,7 @@ int main(int argc, char** argv)
     world.resolver.setExecutor<MarchIntent>(MarchSystem::execute);
     world.resolver.subscribe<MarchIntent>(MarchSystem::onAfterMove);
 
-    world.resolver.setExecutor<DamageIntent>(DamageSystem::apply);
+    world.resolver.setExecutor<DamageIntent>(DamageSystem::execute);
     world.resolver.setExecutor<AddEffectIntent>(AddEffectExecutor::execute);
 
 	parser.parse(file);
