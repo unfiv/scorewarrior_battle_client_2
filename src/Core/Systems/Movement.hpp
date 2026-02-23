@@ -2,8 +2,7 @@
 
 #include "Core/World.hpp"
 #include "Core/Systems/Spatial.hpp"
-#include "Core/Events/UnitMoved.hpp"
-#include "Core/Events/MarchEnded.hpp"
+#include "Features/Intents/MoveIntent.hpp"
 
 namespace sw::core::systems
 {
@@ -23,14 +22,12 @@ namespace sw::core::systems
             const Position nextPos = Spatial::getNextStep(currentPos, targetPos);
             if (Spatial::isPassable(world, nextPos))
             {
-                world.positions[unitId] = nextPos;
-                world.getEvents().event(world.getTick(), events::UnitMoved{unitId, nextPos.x, nextPos.y});
-
-                if (nextPos == targetPos)
-                {
-                    world.getEvents().event(world.getTick(), events::MarchEnded{unitId, nextPos.x, nextPos.y});
-                    targets.erase(unitId);
-                }
+                world.pushIntent(std::make_shared<features::intents::MoveIntent>(
+                    unitId,
+                    currentPos.x,
+                    currentPos.y,
+                    nextPos
+                ));
             }
         }
     };

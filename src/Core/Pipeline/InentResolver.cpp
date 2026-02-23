@@ -4,11 +4,8 @@
 
 namespace sw::core::pipeline
 {
-	void IntentResolver::resolve(World& world, std::shared_ptr<pipeline::Intent> intent)
+	void IntentResolver::resolve(World& world)
 	{
-		//std::queue<std::shared_ptr<pipeline::Intent>> intentQueue;
-        intentQueue.push(intent);
-
         while (!intentQueue.empty())
         {
             auto current = intentQueue.front();
@@ -29,5 +26,11 @@ namespace sw::core::pipeline
             // 3. POST-PROCESS
             for (auto& hook : hooks.post) hook(world, *current);
         }
+	}
+
+	void IntentResolver::resolve(World& world, std::shared_ptr<pipeline::Intent> intent)
+	{
+		emit(intent);
+		resolve(world);
 	}
 }

@@ -29,6 +29,7 @@ namespace sw::core::pipeline
         std::unordered_map<std::type_index, Hooks> registry;
 
     public:
+        void resolve(World& world);
         void resolve(World& world, std::shared_ptr<Intent> intent);
 
         template<typename TIntent>
