@@ -4,13 +4,15 @@
 #include <vector>
 
 #include "Core/World.hpp"
-#include "Core/Systems/Spatial.hpp"
+#include "Core/Domain/Position.hpp"
 
 #include "Features/Domain/Health.hpp"
 #include "Features/Domain/Melee.hpp"
+#include "Features/Domain/PositionOccupier.hpp"
 #include "Features/Domain/RendingAbility.hpp"
 #include "Features/Events/UnitAbilityUsed.hpp"
 #include "Features/Intents/DamageIntent.hpp"
+#include "Features/Systems/MarchSystem.hpp"
 #include "Features/Systems/Effects.hpp"
 #include "Features/Systems/Effects/RendingEffect.hpp"
 #include "Features/Intents/MeleeAttackIntent.hpp"
@@ -37,9 +39,16 @@ namespace sw::features::systems
                 return nullptr;
             }
 
-            auto attackerPos = world.positions[attackerId];
+            auto& positions = world.getComponent<core::domain::Position>();
+            auto positionIt = positions.find(attackerId);
+            if (positionIt == positions.end())
+            {
+                return nullptr;
+            }
+
+            auto attackerPos = positionIt->second;
             std::vector<uint32_t> targets;
-            core::systems::Spatial::findTargets(world, attackerId, attackerPos, targets);
+            MarchSystem::findTargets(world, attackerId, attackerPos, targets);
 
             std::vector<uint32_t> aliveTargets;
             for (uint32_t id : targets)

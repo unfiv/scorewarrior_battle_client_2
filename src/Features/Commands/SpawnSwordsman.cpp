@@ -5,29 +5,30 @@
 #include "Core/IO/CommandParser.hpp"
 #include "Core/Commands/CommandRegistry.hpp"
 
-#include "Features/Domain/Position.hpp"
+#include "Core/Domain/Position.hpp"
+#include "Features/Domain/MarchTarget.hpp"
 #include "Features/Domain/PositionOccupier.hpp"
 #include "Features/Domain/Health.hpp"
 #include "Features/Domain/Melee.hpp"
 #include "Features/Domain/RendingAbility.hpp"
 #include "Features/Intents/MeleeAttackIntent.hpp"
-#include "Features/Intents/MoveIntent.hpp"
+#include "Features/Intents/MarchIntent.hpp"
 
 namespace sw::features::commands
 {
     void SpawnSwordsman::execute(core::World& world) const
     {
-        core::UnitManager::spawn(world, unitId, "swordsman", [&]()
+        core::UnitManager::spawn(world, unitId, "swordsman", {x, y}, [&]()
         {
-            world.getComponent<domain::Position>()[unitId] = { x, y };
             world.getComponent<domain::PositionOccupier>()[unitId];
+            world.getComponent<domain::MarchTarget>()[unitId] = { {x, y} };
             world.getComponent<domain::Health>()[unitId] = { hp };
             world.getComponent<domain::Melee>()[unitId] = { strength };
             world.getComponent<domain::RendingAbility>()[unitId] = { chance, rending };
 
             world.getIntentsChain(unitId)
                 .add<intents::MeleeAttackIntent>()
-                .add<intents::MoveIntent>();
+                .add<intents::MarchIntent>();
         });
     }
 }

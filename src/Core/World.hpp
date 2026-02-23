@@ -32,7 +32,6 @@ namespace sw::core
         std::unordered_map<uint32_t, pipeline::IntentChain> intentsChains;
 
         std::vector<uint32_t> creationOrder;
-        //std::unordered_map<uint32_t, Position> targetPositions;
         
         registry::RestrictionsRegistry restrictions;
 

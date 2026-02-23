@@ -2,7 +2,6 @@
 
 #include <array>
 #include <span>
-#include <cassert>
 
 #include "Core/Domain/Position.hpp"
 
@@ -18,6 +17,11 @@ namespace sw::core
 		restrictions.clear();
 
 		auto ids = creationOrder;
+        auto hasPosition = [this](uint32_t id)
+        {
+            const auto& positions = getComponent<domain::Position>();
+            return positions.find(id) != positions.end();
+        };
 
         const std::array<std::type_index, 2> maintenanceChain = {
             std::type_index(typeid(features::intents::EffectsTickIntent)),
@@ -49,8 +53,12 @@ namespace sw::core
 
         for (uint32_t id : ids)
         {
-            // Sanity check as Position component is fundamental for the unit's existence
-            assert(getComponent<domain::Position>().find(id) != getComponent<domain::Position>().end());
+            // `ids` is a snapshot from the tick start. A unit can die and be removed
+            // from components while this tick is still executing, so we must skip stale ids.
+            if (!hasPosition(id))
+            {
+                continue;
+            }
 
             executeChain(id, maintenanceChain, false);
 
@@ -65,8 +73,10 @@ namespace sw::core
 
         for (uint32_t id : ids)
         {
-            // Sanity check as Position component is fundamental for the unit's existence
-            assert(getComponent<domain::Position>().find(id) != getComponent<domain::Position>().end());
+            if (!hasPosition(id))
+            {
+                continue;
+            }
 
             executeChain(id, std::span<const std::type_index>(maintenanceChain).subspan(1, 1), false);
         }

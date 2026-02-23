@@ -6,14 +6,16 @@
 #include <vector>
 
 #include "Core/World.hpp"
-#include "Core/Systems/Spatial.hpp"
+#include "Core/Domain/Position.hpp"
 #include "Features/Domain/Health.hpp"
+#include "Features/Domain/PositionOccupier.hpp"
 #include "Features/Domain/Ranged.hpp"
 #include "Features/Domain/PoisonAbility.hpp"
 #include "Features/Events/UnitAbilityUsed.hpp"
 #include "Features/Systems/Damage.hpp"
 #include "Features/Systems/Effects.hpp"
 #include "Features/Systems/Effects/PoisonEffect.hpp"
+#include "Features/Systems/MarchSystem.hpp"
 #include "Features/Intents/RangedAttackIntent.hpp"
 
 namespace sw::features::systems
@@ -38,10 +40,17 @@ namespace sw::features::systems
                 return nullptr;
             }
 
-            auto attackerPos = world.positions[attackerId];
+            auto& positions = world.getComponent<core::domain::Position>();
+            auto positionIt = positions.find(attackerId);
+            if (positionIt == positions.end())
+            {
+                return nullptr;
+            }
+
+            auto attackerPos = positionIt->second;
 
             std::vector<uint32_t> neighbors;
-            core::systems::Spatial::findTargets(world, attackerId, attackerPos, neighbors);
+            MarchSystem::findTargets(world, attackerId, attackerPos, neighbors);
             for (uint32_t id : neighbors)
             {
                 if (healthMap.count(id) && healthMap[id].hp > 0)
@@ -51,7 +60,7 @@ namespace sw::features::systems
             }
 
             std::vector<uint32_t> targets;
-            for (const auto& [targetId, targetPos] : world.positions)
+            for (const auto& [targetId, targetPos] : positions)
             {
                 if (targetId == attackerId) continue;
                 if (!healthMap.count(targetId) || healthMap[targetId].hp == 0) continue;
@@ -110,7 +119,7 @@ namespace sw::features::systems
             }
         }
 
-        static uint32_t chebyshevDistance(core::Position lhs, core::Position rhs)
+        static uint32_t chebyshevDistance(core::domain::Position lhs, core::domain::Position rhs)
         {
             auto dx = std::abs(static_cast<int>(lhs.x) - static_cast<int>(rhs.x));
             auto dy = std::abs(static_cast<int>(lhs.y) - static_cast<int>(rhs.y));

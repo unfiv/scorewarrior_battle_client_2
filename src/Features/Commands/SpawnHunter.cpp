@@ -5,7 +5,8 @@
 #include "Core/IO/CommandParser.hpp"
 #include "Core/Commands/CommandRegistry.hpp"
 
-#include "Features/Domain/Position.hpp"
+#include "Core/Domain/Position.hpp"
+#include "Features/Domain/MarchTarget.hpp"
 #include "Features/Domain/PositionOccupier.hpp"
 #include "Features/Domain/Health.hpp"
 #include "Features/Domain/Melee.hpp"
@@ -13,16 +14,16 @@
 #include "Features/Domain/PoisonAbility.hpp"
 #include "Features/Intents/RangedAttackIntent.hpp"
 #include "Features/Intents/MeleeAttackIntent.hpp"
-#include "Features/Intents/MoveIntent.hpp"
+#include "Features/Intents/MarchIntent.hpp"
 
 namespace sw::features::commands
 {
     void SpawnHunter::execute(core::World& world) const
     {
-        core::UnitManager::spawn(world, unitId, "hunter", [&]()
+        core::UnitManager::spawn(world, unitId, "hunter", {x, y}, [&]()
         {
-            world.getComponent<domain::Position>()[unitId] = { x, y };
             world.getComponent<domain::PositionOccupier>()[unitId];
+            world.getComponent<domain::MarchTarget>()[unitId] = { {x, y} };
             world.getComponent<domain::Health>()[unitId] = { hp };
             world.getComponent<domain::Melee>()[unitId] = { strength };
             world.getComponent<domain::Ranged>()[unitId] = { agility, range };
@@ -31,7 +32,7 @@ namespace sw::features::commands
             world.getIntentsChain(unitId)
                 .add<intents::RangedAttackIntent>()
                 .add<intents::MeleeAttackIntent>()
-                .add<intents::MoveIntent>();
+                .add<intents::MarchIntent>();
         });
     }
 }

@@ -11,14 +11,14 @@
 #include "Features/Systems/Effects.hpp"
 #include "Features/Systems/Death.hpp"
 
-#include "Features/Intents/MoveIntent.hpp"
+#include "Features/Intents/MarchIntent.hpp"
 #include "Features/Intents/DamageIntent.hpp"
 #include "Features/Intents/RangedAttackIntent.hpp"
 #include "Features/Intents/MeleeAttackIntent.hpp"
 #include "Features/Intents/EffectsTickIntent.hpp"
 #include "Features/Intents/DeathIntent.hpp"
 
-#include "Features/Systems/MovementSystem.hpp"
+#include "Features/Systems/MarchSystem.hpp"
 #include "Features/Systems/DamageSystem.hpp"
 
 #include <fstream>
@@ -62,9 +62,9 @@ int main(int argc, char** argv)
 	world.resolver.setPlanner<MeleeAttackIntent>(MeleeAttack::plan);
     world.resolver.setExecutor<MeleeAttackIntent>(MeleeAttack::execute);
 
-	world.resolver.setPlanner<MoveIntent>(MovementSystem::plan);
-    world.resolver.setExecutor<MoveIntent>(MovementSystem::execute);
-    world.resolver.subscribe<MoveIntent>(MovementSystem::onAfterMove);
+	world.resolver.setPlanner<MarchIntent>(MarchSystem::plan);
+    world.resolver.setExecutor<MarchIntent>(MarchSystem::execute);
+    world.resolver.subscribe<MarchIntent>(MarchSystem::onAfterMove);
 
     world.resolver.setExecutor<DamageIntent>(DamageSystem::apply);
 
