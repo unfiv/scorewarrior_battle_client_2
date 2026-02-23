@@ -11,6 +11,8 @@
 #include "Features/Domain/Health.hpp"
 #include "Features/Domain/Melee.hpp"
 #include "Features/Domain/Ranged.hpp"
+#include "Features/Domain/MeleeAttackable.hpp"
+#include "Features/Domain/RangedAttackable.hpp"
 #include "Features/Domain/PoisonAbility.hpp"
 #include "Features/Intents/RangedAttackIntent.hpp"
 #include "Features/Intents/MeleeAttackIntent.hpp"
@@ -27,6 +29,8 @@ namespace sw::features::commands
             world.getComponent<domain::Health>()[unitId] = { hp };
             world.getComponent<domain::Melee>()[unitId] = { strength };
             world.getComponent<domain::Ranged>()[unitId] = { agility, range };
+            world.getComponent<domain::MeleeAttackable>()[unitId];
+            world.getComponent<domain::RangedAttackable>()[unitId];
             world.getComponent<domain::PoisonAbility>()[unitId] = { chance, poison };
 
             world.getIntentsChain(unitId)

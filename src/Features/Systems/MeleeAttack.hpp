@@ -8,6 +8,7 @@
 
 #include "Features/Domain/Health.hpp"
 #include "Features/Domain/Melee.hpp"
+#include "Features/Domain/MeleeAttackable.hpp"
 #include "Features/Domain/PositionOccupier.hpp"
 #include "Features/Domain/RendingAbility.hpp"
 #include "Features/Events/UnitAbilityUsed.hpp"
@@ -35,6 +36,7 @@ namespace sw::features::systems
             }
 
             auto& positions = world.getComponent<core::domain::Position>();
+            auto& meleeAttackableMap = world.getComponent<domain::MeleeAttackable>();
             auto positionIt = positions.find(attackerId);
             if (positionIt == positions.end())
             {
@@ -48,7 +50,7 @@ namespace sw::features::systems
             std::vector<uint32_t> aliveTargets;
             for (uint32_t id : targets)
             {
-                if (healthMap.count(id) && healthMap[id].hp > 0)
+                if (healthMap.count(id) && healthMap[id].hp > 0 && meleeAttackableMap.count(id))
                 {
                     aliveTargets.push_back(id);
                 }

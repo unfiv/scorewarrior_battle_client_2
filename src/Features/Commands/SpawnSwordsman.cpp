@@ -10,6 +10,8 @@
 #include "Features/Domain/PositionOccupier.hpp"
 #include "Features/Domain/Health.hpp"
 #include "Features/Domain/Melee.hpp"
+#include "Features/Domain/MeleeAttackable.hpp"
+#include "Features/Domain/RangedAttackable.hpp"
 #include "Features/Domain/RendingAbility.hpp"
 #include "Features/Intents/MeleeAttackIntent.hpp"
 #include "Features/Intents/MarchIntent.hpp"
@@ -24,6 +26,8 @@ namespace sw::features::commands
             world.getComponent<domain::MarchTarget>()[unitId] = { {x, y} };
             world.getComponent<domain::Health>()[unitId] = { hp };
             world.getComponent<domain::Melee>()[unitId] = { strength };
+            world.getComponent<domain::MeleeAttackable>()[unitId];
+            world.getComponent<domain::RangedAttackable>()[unitId];
             world.getComponent<domain::RendingAbility>()[unitId] = { chance, rending };
 
             world.getIntentsChain(unitId)
