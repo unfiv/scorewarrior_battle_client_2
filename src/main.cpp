@@ -4,7 +4,7 @@
 #include "Core/IO/CommandParser.hpp"
 #include "Core/Commands/CreateMap.hpp"
 #include "Core/Events/MapCreated.hpp"
-#include "Core/Services/Simulation/Simulation.hpp"
+#include "Core/Services/CommandDispatcher.hpp"
 
 #include "Features/Systems/RangedAttack.hpp"
 #include "Features/Systems/MeleeAttack.hpp"
