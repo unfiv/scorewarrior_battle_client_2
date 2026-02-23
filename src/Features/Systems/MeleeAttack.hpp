@@ -10,7 +10,7 @@
 #include "Features/Domain/Melee.hpp"
 #include "Features/Domain/RendingAbility.hpp"
 #include "Features/Events/UnitAbilityUsed.hpp"
-#include "Features/Systems/Damage.hpp"
+#include "Features/Intents/DamageIntent.hpp"
 #include "Features/Systems/Effects.hpp"
 #include "Features/Systems/Effects/RendingEffect.hpp"
 
@@ -85,7 +85,7 @@ namespace sw::features::systems
                 }
             }
 
-            Damage::apply(world, attackerId, targetId, damage);
+            world.pushIntent(std::make_shared<intents::DamageIntent>(attackerId, targetId, damage, "melee"));
         }
     };
 }

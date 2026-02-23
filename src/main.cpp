@@ -13,9 +13,10 @@
 #include "Features/Systems/Death.hpp"
 
 #include "Features/Intents/MoveIntent.hpp"
-#include "Features/Intents/InentDamage.hpp"
+#include "Features/Intents/DamageIntent.hpp"
 
 #include "Features/Systems/MovementSystem.hpp"
+#include "Features/Systems/DamageSystem.hpp"
 
 #include <fstream>
 
@@ -43,20 +44,20 @@ int main(int argc, char** argv)
 
 	sw::core::CommandDispatcher dispatcher(world, parser);
 
-	/*world.systems.push_back(sw::features::systems::Effects::processUnit);
+	world.systems.push_back(sw::features::systems::Effects::processUnit);
 	world.systems.push_back(sw::features::systems::Death::processUnit);
 	world.systems.push_back(sw::features::systems::RangedAttack::processUnit);
 	world.systems.push_back(sw::features::systems::MeleeAttack::processUnit);
 	world.systems.push_back(sw::core::systems::Movement::processUnit);
-	world.systems.push_back(sw::features::systems::Death::update);*/
+	world.systems.push_back(sw::features::systems::Death::update);
 
 	using namespace sw::features::systems;
     using namespace sw::features::intents;
 
-    // Connect Intents to their stateless System methods
     world.resolver.setExecutor<MoveIntent>(MovementSystem::execute);
-    
-    //world.resolver.setExecutor<DamageIntent>(DamageSystem::apply);
+    world.resolver.subscribe<MoveIntent>(MovementSystem::onAfterMove);
+
+    world.resolver.setExecutor<DamageIntent>(DamageSystem::apply);
 
 	parser.parse(file);
 
