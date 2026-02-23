@@ -4,7 +4,7 @@
 #include "Core/IO/CommandParser.hpp"
 #include "Core/Commands/CreateMap.hpp"
 #include "Core/Events/MapCreated.hpp"
-#include "Core/CommandDispatcher.hpp"
+#include "Core/Services/Simulation/Simulation.hpp"
 
 #include "Features/Systems/RangedAttack.hpp"
 #include "Features/Systems/MeleeAttack.hpp"
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 	World world(events);
 	CommandParser parser;
 
-	sw::core::CommandDispatcher dispatcher(world, parser);
+	sw::core::services::CommandDispatcher dispatcher(world, parser);
 
 	using namespace sw::features::systems;
     using namespace sw::features::intents;

@@ -8,7 +8,7 @@
 #include "Core/Commands/CommandRegistry.hpp"
 #include "Core/Commands/CreateMap.hpp"
 
-namespace sw::core
+namespace sw::core::services
 {
     class CommandDispatcher
     {

@@ -5,7 +5,6 @@
 #include <typeindex>
 
 #include "Core/Domain/Map.hpp"
-#include "Core/Registry/RestrictionsRegistry.hpp"
 
 #include "Core/Pipeline/IntentResolver.hpp"
 #include "Core/Pipeline/IntentChain.hpp"
@@ -33,7 +32,6 @@ namespace sw::core
 
         std::vector<uint32_t> creationOrder;
         
-        registry::RestrictionsRegistry restrictions;
 
         void pushIntent(std::shared_ptr<pipeline::Intent> intent)
         {

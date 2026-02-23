@@ -25,11 +25,6 @@ namespace sw::features::systems
     public:
         static std::shared_ptr<intents::RangedAttackIntent> plan(core::World& world, uint32_t attackerId)
         {
-            if (!world.restrictions.isAllowed(attackerId, core::registry::restrictions::ATTACK))
-            {
-                return nullptr;
-            }
-
             auto& healthMap = world.getComponent<domain::Health>();
             auto& rangedMap = world.getComponent<domain::Ranged>();
 
@@ -95,9 +90,6 @@ namespace sw::features::systems
             auto targetId = intent.targetId;
             auto& ranged = world.getComponent<domain::Ranged>()[attackerId];
             auto& poisonAbilities = world.getComponent<domain::PoisonAbility>();
-
-            world.restrictions.modify(attackerId, core::registry::restrictions::MOVE, 1);
-            world.restrictions.modify(attackerId, core::registry::restrictions::ATTACK, 1);
 
             uint32_t damage = ranged.agility;
             if (auto ability = poisonAbilities.find(attackerId); ability != poisonAbilities.end())
