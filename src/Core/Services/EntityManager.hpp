@@ -9,9 +9,9 @@
 #include "Core/Events/UnitSpawned.hpp"
 #include "Core/Events/UnitDied.hpp"
 
-namespace sw::core
+namespace sw::core::services
 {
-    class UnitManager
+    class EntityManager
     {
     public:
         template<typename F>

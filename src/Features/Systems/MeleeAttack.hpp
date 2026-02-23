@@ -24,11 +24,6 @@ namespace sw::features::systems
     public:
         static std::shared_ptr<intents::MeleeAttackIntent> plan(core::World& world, uint32_t attackerId)
         {
-            if (!world.restrictions.isAllowed(attackerId, core::registry::restrictions::ATTACK))
-            {
-                return nullptr;
-            }
-
             auto& healthMap = world.getComponent<domain::Health>();
             auto& meleeMap = world.getComponent<domain::Melee>();
 
@@ -82,9 +77,6 @@ namespace sw::features::systems
             auto targetId = intent.targetId;
             auto& attackerMelee = world.getComponent<domain::Melee>()[attackerId];
             auto& rendingAbilities = world.getComponent<domain::RendingAbility>();
-
-            world.restrictions.modify(attackerId, core::registry::restrictions::MOVE, 1);
-            world.restrictions.modify(attackerId, core::registry::restrictions::ATTACK, 1);
 
             uint32_t damage = attackerMelee.strength;
             if (auto ability = rendingAbilities.find(attackerId); ability != rendingAbilities.end())

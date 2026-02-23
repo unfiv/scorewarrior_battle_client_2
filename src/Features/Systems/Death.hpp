@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Core/World.hpp"
-#include "Core/UnitManager.hpp"
+#include "Core/Services/EntityManager.hpp"
 #include "Features/Domain/Health.hpp"
 #include "Features/Domain/Melee.hpp"
 #include "Features/Domain/RendingAbility.hpp"
@@ -37,7 +37,7 @@ namespace sw::features::systems
 	private:
         static void destroy(core::World& world, uint32_t id)
         {
-            core::UnitManager::destroy(world, id, [&](uint32_t targetId) {});
+            core::services::EntityManager::destroy(world, id, [&](uint32_t targetId) {});
         }
     };
 }

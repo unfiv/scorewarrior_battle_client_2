@@ -1,7 +1,7 @@
 #include "SpawnHunter.hpp"
 
 #include "Core/World.hpp"
-#include "Core/UnitManager.hpp"
+#include "Core/Services/EntityManager.hpp"
 #include "Core/IO/CommandParser.hpp"
 #include "Core/Commands/CommandRegistry.hpp"
 
@@ -20,7 +20,7 @@ namespace sw::features::commands
 {
     void SpawnHunter::execute(core::World& world) const
     {
-        core::UnitManager::spawn(world, unitId, "hunter", {x, y}, [&]()
+        core::services::EntityManager::spawn(world, unitId, "hunter", {x, y}, [&]()
         {
             world.getComponent<domain::PositionOccupier>()[unitId];
             world.getComponent<domain::MarchTarget>()[unitId] = { {x, y} };

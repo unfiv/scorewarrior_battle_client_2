@@ -14,7 +14,6 @@ namespace sw::core
 	{
 		++tick;
 
-		restrictions.clear();
 
 		auto ids = creationOrder;
         auto hasPosition = [this](uint32_t id)
