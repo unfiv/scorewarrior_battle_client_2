@@ -10,6 +10,7 @@
 #include "Features/Domain/Health.hpp"
 #include "Features/Domain/PositionOccupier.hpp"
 #include "Features/Domain/Ranged.hpp"
+#include "Features/Domain/RangedAttackable.hpp"
 #include "Features/Domain/PoisonAbility.hpp"
 #include "Features/Events/UnitAbilityUsed.hpp"
 #include "Features/Systems/Damage.hpp"
@@ -36,6 +37,7 @@ namespace sw::features::systems
             }
 
             auto& positions = world.getComponent<core::domain::Position>();
+            auto& rangedAttackableMap = world.getComponent<domain::RangedAttackable>();
             auto positionIt = positions.find(attackerId);
             if (positionIt == positions.end())
             {
@@ -59,9 +61,15 @@ namespace sw::features::systems
             {
                 if (targetId == attackerId) continue;
                 if (!healthMap.count(targetId) || healthMap[targetId].hp == 0) continue;
+                if (!rangedAttackableMap.count(targetId)) continue;
 
-                uint32_t dist = chebyshevDistance(attackerPos, targetPos);
-                if (dist >= 2 && dist <= rangedMap[attackerId].range)
+                const auto& targetRangedAttackable = rangedAttackableMap[targetId];
+                int effectiveMinRange = std::max(0, 2 + targetRangedAttackable.minRangeModifier);
+                int effectiveMaxRange = std::max(0, static_cast<int>(rangedMap[attackerId].range) + targetRangedAttackable.maxRangeModifier);
+                if (effectiveMaxRange < effectiveMinRange) continue;
+
+                int dist = static_cast<int>(chebyshevDistance(attackerPos, targetPos));
+                if (dist >= effectiveMinRange && dist <= effectiveMaxRange)
                 {
                     targets.push_back(targetId);
                 }
