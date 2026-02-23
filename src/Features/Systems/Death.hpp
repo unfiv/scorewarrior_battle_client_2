@@ -10,35 +10,28 @@
 #include "Features/Domain/Ranged.hpp"
 #include "Features/Domain/PoisonAbility.hpp"
 #include "Features/Domain/Effects/EffectList.hpp"
+#include "Features/Intents/DeathIntent.hpp"
 
 namespace sw::features::systems
 {
     class Death
     {
     public:
-        static void processUnit(core::World& world, uint32_t id)
+        static std::shared_ptr<intents::DeathIntent> plan(core::World& world, uint32_t id)
         {
             auto& healthMap = world.getComponent<domain::Health>();
             auto health = healthMap.find(id);
-			if (health != healthMap.end())
+            if (health != healthMap.end() && health->second.hp == 0)
             {
-                if (health->second.hp == 0)
-					destroy(world, id);
+                return std::make_shared<intents::DeathIntent>(id);
             }
+
+            return nullptr;
         }
 
-        static void update(core::World& world)
+        static void execute(core::World& world, intents::DeathIntent& intent)
         {
-            auto& healthMap = world.getComponent<domain::Health>();
-            std::vector<uint32_t> toDelete;
-            for (auto const& [id, health] : healthMap)
-            {
-                if (health.hp == 0)
-                    toDelete.push_back(id);
-            }
-
-            for (uint32_t id : toDelete)
-                destroy(world, id);                
+            destroy(world, intent.unitId);
         }
 
 	private:

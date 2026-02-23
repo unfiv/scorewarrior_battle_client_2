@@ -8,6 +8,8 @@
 #include "Features/Domain/Health.hpp"
 #include "Features/Domain/Melee.hpp"
 #include "Features/Domain/RendingAbility.hpp"
+#include "Features/Intents/MeleeAttackIntent.hpp"
+#include "Features/Intents/MoveIntent.hpp"
 
 namespace sw::features::commands
 {
@@ -18,6 +20,10 @@ namespace sw::features::commands
             world.getComponent<domain::Health>()[unitId] = { hp };
             world.getComponent<domain::Melee>()[unitId] = { strength };
             world.getComponent<domain::RendingAbility>()[unitId] = { chance, rending };
+
+            world.getIntentsChain(unitId)
+                .add<intents::MeleeAttackIntent>()
+                .add<intents::MoveIntent>();
         });
     }
 }

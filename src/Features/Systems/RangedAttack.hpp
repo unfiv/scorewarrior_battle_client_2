@@ -14,17 +14,18 @@
 #include "Features/Systems/Damage.hpp"
 #include "Features/Systems/Effects.hpp"
 #include "Features/Systems/Effects/PoisonEffect.hpp"
+#include "Features/Intents/RangedAttackIntent.hpp"
 
 namespace sw::features::systems
 {
     class RangedAttack
     {
     public:
-        static void processUnit(core::World& world, uint32_t attackerId)
+        static std::shared_ptr<intents::RangedAttackIntent> plan(core::World& world, uint32_t attackerId)
         {
             if (!world.restrictions.isAllowed(attackerId, core::registry::restrictions::ATTACK))
             {
-                return;
+                return nullptr;
             }
 
             auto& healthMap = world.getComponent<domain::Health>();
@@ -34,7 +35,7 @@ namespace sw::features::systems
                 rangedMap.find(attackerId) == rangedMap.end() ||
                 healthMap[attackerId].hp == 0)
             {
-                return;
+                return nullptr;
             }
 
             auto attackerPos = world.positions[attackerId];
@@ -45,7 +46,7 @@ namespace sw::features::systems
             {
                 if (healthMap.count(id) && healthMap[id].hp > 0)
                 {
-                    return;
+                    return nullptr;
                 }
             }
 
@@ -64,7 +65,7 @@ namespace sw::features::systems
 
             if (targets.empty())
             {
-                return;
+                return nullptr;
             }
 
             static std::random_device rd;
@@ -72,20 +73,22 @@ namespace sw::features::systems
             std::uniform_int_distribution<size_t> targetDistribution(0, targets.size() - 1);
             uint32_t targetId = targets[targetDistribution(gen)];
 
-            world.restrictions.modify(attackerId, core::registry::restrictions::MOVE, 1);
-            world.restrictions.modify(attackerId, core::registry::restrictions::ATTACK, 1);
-            executeAttack(world, attackerId, targetId);
+            return std::make_shared<intents::RangedAttackIntent>(attackerId, targetId);
         }
 
-    private:
-        static void executeAttack(core::World& world, uint32_t attackerId, uint32_t targetId)
+        static void execute(core::World& world, intents::RangedAttackIntent& intent)
         {
             static std::random_device rd;
             static std::mt19937 gen(rd());
             static std::uniform_int_distribution<> dis(1, 1000);
 
+            auto attackerId = intent.attackerId;
+            auto targetId = intent.targetId;
             auto& ranged = world.getComponent<domain::Ranged>()[attackerId];
             auto& poisonAbilities = world.getComponent<domain::PoisonAbility>();
+
+            world.restrictions.modify(attackerId, core::registry::restrictions::MOVE, 1);
+            world.restrictions.modify(attackerId, core::registry::restrictions::ATTACK, 1);
 
             uint32_t damage = ranged.agility;
             if (auto ability = poisonAbilities.find(attackerId); ability != poisonAbilities.end())

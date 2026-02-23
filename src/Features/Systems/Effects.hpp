@@ -2,17 +2,28 @@
 
 #include "Core/World.hpp"
 #include "Features/Domain/Effects/EffectList.hpp"
+#include "Features/Intents/EffectsTickIntent.hpp"
 
 namespace sw::features::systems
 {
     class Effects
     {
     public:
-        static void processUnit(core::World& world, uint32_t targetId)
+        static std::shared_ptr<intents::EffectsTickIntent> plan(core::World& world, uint32_t targetId)
         {
             auto& effectMap = world.getComponent<domain::effects::EffectList>();
             
-            // Take effect list for the current target, if it exists
+            auto itList = effectMap.find(targetId);
+            if (itList == effectMap.end() || itList->second.active.empty()) return nullptr;
+
+            return std::make_shared<intents::EffectsTickIntent>(targetId);
+        }
+
+        static void execute(core::World& world, intents::EffectsTickIntent& intent)
+        {
+            auto targetId = intent.unitId;
+            auto& effectMap = world.getComponent<domain::effects::EffectList>();
+
             auto itList = effectMap.find(targetId);
             if (itList == effectMap.end()) return;
 

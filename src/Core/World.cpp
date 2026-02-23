@@ -1,6 +1,10 @@
 #include "World.hpp"
 
-#include <algorithm>
+#include <array>
+#include <span>
+
+#include "Features/Intents/DeathIntent.hpp"
+#include "Features/Intents/EffectsTickIntent.hpp"
 
 namespace sw::core
 {
@@ -10,36 +14,67 @@ namespace sw::core
 
 		restrictions.clear();
 
-        auto ids = creationOrder;
+		auto ids = creationOrder;
 
-        for (size_t i = 0; i < systems.size(); ++i)
+        const std::array<std::type_index, 2> maintenanceChain = {
+            std::type_index(typeid(features::intents::EffectsTickIntent)),
+            std::type_index(typeid(features::intents::DeathIntent))
+        };
+
+        auto executeChain = [this](uint32_t id, std::span<const std::type_index> chain, bool stopOnSuccess)
         {
-            if (std::holds_alternative<GlobalSystem>(systems[i]))
+            for (const auto& intentType : chain)
             {
-                std::get<GlobalSystem>(systems[i])(*this);
-            }
-            else
-            {
-                size_t j = i;
-                while (j < systems.size() && std::holds_alternative<UnitSystem>(systems[j]))
+                auto planner = resolver.getPlanner(intentType);
+                if (!planner)
                 {
-                    j++;
+                    continue;
                 }
 
-                for (uint32_t id : ids)
+                auto intent = planner(*this, id);
+                if (!intent)
                 {
-                    for (size_t k = i; k < j; ++k)
-                    {
-                        if (positions.find(id) == positions.end())
-                        {
-                            break;
-                        }
-                        std::get<UnitSystem>(systems[k])(*this, id);
-                    }
+                    continue;
                 }
 
-                i = j - 1;
+                if (resolver.resolve(*this, intent) && stopOnSuccess)
+                {
+                    break;
+                }
             }
+        };
+
+        for (uint32_t id : ids)
+        {
+            if (positions.find(id) == positions.end())
+            {
+                continue;
+            }
+
+            executeChain(id, maintenanceChain, false);
+
+            if (positions.find(id) == positions.end())
+            {
+                continue;
+            }
+
+            auto chainIt = intentsChains.find(id);
+            if (chainIt == intentsChains.end())
+            {
+                continue;
+            }
+
+            executeChain(id, chainIt->second.get(), true);
+        }
+
+        for (uint32_t id : ids)
+        {
+            if (positions.find(id) == positions.end())
+            {
+                continue;
+            }
+
+            executeChain(id, std::span<const std::type_index>(maintenanceChain).subspan(1, 1), false);
         }
 	}
 }

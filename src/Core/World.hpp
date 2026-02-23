@@ -1,16 +1,15 @@
 #pragma once
 
 #include <unordered_map>
-#include <functional>
-#include <typeindex>
 #include <any>
-#include <variant>
+#include <typeindex>
 
 #include "Core/Position.hpp"
 #include "Core/Map.hpp"
 #include "Core/Registry/RestrictionsRegistry.hpp"
 
 #include "Core/Pipeline/IntentResolver.hpp"
+#include "Core/Pipeline/IntentChain.hpp"
 
 namespace sw::core::io
 {
@@ -20,10 +19,6 @@ namespace sw::core::io
 namespace sw::core
 {
     class World;
-
-    using UnitSystem = std::function<void(World&, uint32_t)>;
-    using GlobalSystem = std::function<void(World&)>;
-    using System = std::variant<UnitSystem, GlobalSystem>;
 
     class World
     {
@@ -37,7 +32,7 @@ namespace sw::core
         Map map{0, 0};
         pipeline::IntentResolver resolver;
 
-        std::vector<System> systems;
+        std::unordered_map<uint32_t, pipeline::IntentChain> intentsChains;
 
         std::vector<uint32_t> creationOrder;
         std::unordered_map<uint32_t, Position> positions;
@@ -59,6 +54,11 @@ namespace sw::core
                 storage = std::make_any<std::unordered_map<uint32_t, T>>();
             }
             return std::any_cast<std::unordered_map<uint32_t, T>&>(storage);
+        }
+
+        pipeline::IntentChain& getIntentsChain(uint32_t id)
+        {
+            return intentsChains[id];
         }
 
         bool isGameOver() const { return tick > 100; }

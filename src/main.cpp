@@ -5,7 +5,6 @@
 #include "Core/Commands/CreateMap.hpp"
 #include "Core/Events/MapCreated.hpp"
 #include "Core/CommandDispatcher.hpp"
-#include "Core/Systems/Movement.hpp"
 
 #include "Features/Systems/RangedAttack.hpp"
 #include "Features/Systems/MeleeAttack.hpp"
@@ -14,6 +13,10 @@
 
 #include "Features/Intents/MoveIntent.hpp"
 #include "Features/Intents/DamageIntent.hpp"
+#include "Features/Intents/RangedAttackIntent.hpp"
+#include "Features/Intents/MeleeAttackIntent.hpp"
+#include "Features/Intents/EffectsTickIntent.hpp"
+#include "Features/Intents/DeathIntent.hpp"
 
 #include "Features/Systems/MovementSystem.hpp"
 #include "Features/Systems/DamageSystem.hpp"
@@ -44,15 +47,20 @@ int main(int argc, char** argv)
 
 	sw::core::CommandDispatcher dispatcher(world, parser);
 
-	world.systems.push_back(sw::features::systems::Effects::processUnit);
-	world.systems.push_back(sw::features::systems::Death::processUnit);
-	world.systems.push_back(sw::features::systems::RangedAttack::processUnit);
-	world.systems.push_back(sw::features::systems::MeleeAttack::processUnit);
-	world.systems.push_back(sw::core::systems::Movement::processUnit);
-	world.systems.push_back(sw::features::systems::Death::update);
-
 	using namespace sw::features::systems;
     using namespace sw::features::intents;
+
+	world.resolver.setPlanner<EffectsTickIntent>(Effects::plan);
+    world.resolver.setExecutor<EffectsTickIntent>(Effects::execute);
+
+	world.resolver.setPlanner<DeathIntent>(Death::plan);
+    world.resolver.setExecutor<DeathIntent>(Death::execute);
+
+	world.resolver.setPlanner<RangedAttackIntent>(RangedAttack::plan);
+    world.resolver.setExecutor<RangedAttackIntent>(RangedAttack::execute);
+
+	world.resolver.setPlanner<MeleeAttackIntent>(MeleeAttack::plan);
+    world.resolver.setExecutor<MeleeAttackIntent>(MeleeAttack::execute);
 
 	world.resolver.setPlanner<MoveIntent>(MovementSystem::plan);
     world.resolver.setExecutor<MoveIntent>(MovementSystem::execute);

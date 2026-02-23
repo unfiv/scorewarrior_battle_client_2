@@ -28,6 +28,7 @@ namespace sw::core
             if (world.positions.erase(id))
             {
                 world.targetPositions.erase(id);
+                world.intentsChains.erase(id);
                 std::erase(world.creationOrder, id);
 				cleanup(id);
                 world.getEvents().event(world.getTick(), events::UnitDied{id});

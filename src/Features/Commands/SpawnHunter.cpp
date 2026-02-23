@@ -9,6 +9,9 @@
 #include "Features/Domain/Melee.hpp"
 #include "Features/Domain/Ranged.hpp"
 #include "Features/Domain/PoisonAbility.hpp"
+#include "Features/Intents/RangedAttackIntent.hpp"
+#include "Features/Intents/MeleeAttackIntent.hpp"
+#include "Features/Intents/MoveIntent.hpp"
 
 namespace sw::features::commands
 {
@@ -20,6 +23,11 @@ namespace sw::features::commands
             world.getComponent<domain::Melee>()[unitId] = { strength };
             world.getComponent<domain::Ranged>()[unitId] = { agility, range };
             world.getComponent<domain::PoisonAbility>()[unitId] = { chance, poison };
+
+            world.getIntentsChain(unitId)
+                .add<intents::RangedAttackIntent>()
+                .add<intents::MeleeAttackIntent>()
+                .add<intents::MoveIntent>();
         });
     }
 }

@@ -13,17 +13,18 @@
 #include "Features/Intents/DamageIntent.hpp"
 #include "Features/Systems/Effects.hpp"
 #include "Features/Systems/Effects/RendingEffect.hpp"
+#include "Features/Intents/MeleeAttackIntent.hpp"
 
 namespace sw::features::systems
 {
     class MeleeAttack
     {
     public:
-        static void processUnit(core::World& world, uint32_t attackerId)
+        static std::shared_ptr<intents::MeleeAttackIntent> plan(core::World& world, uint32_t attackerId)
         {
             if (!world.restrictions.isAllowed(attackerId, core::registry::restrictions::ATTACK))
             {
-                return;
+                return nullptr;
             }
 
             auto& healthMap = world.getComponent<domain::Health>();
@@ -33,7 +34,7 @@ namespace sw::features::systems
                 meleeMap.find(attackerId) == meleeMap.end() ||
                 healthMap[attackerId].hp == 0)
             {
-                return;
+                return nullptr;
             }
 
             auto attackerPos = world.positions[attackerId];
@@ -51,7 +52,7 @@ namespace sw::features::systems
 
             if (aliveTargets.empty())
             {
-                return;
+                return nullptr;
             }
 
             static std::random_device rd;
@@ -59,20 +60,22 @@ namespace sw::features::systems
             std::uniform_int_distribution<size_t> targetDistribution(0, aliveTargets.size() - 1);
             uint32_t targetId = aliveTargets[targetDistribution(gen)];
 
-            world.restrictions.modify(attackerId, core::registry::restrictions::MOVE, 1);
-            world.restrictions.modify(attackerId, core::registry::restrictions::ATTACK, 1);
-            executeAttack(world, attackerId, targetId);
+            return std::make_shared<intents::MeleeAttackIntent>(attackerId, targetId);
         }
 
-    private:
-        static void executeAttack(core::World& world, uint32_t attackerId, uint32_t targetId)
+        static void execute(core::World& world, intents::MeleeAttackIntent& intent)
         {
             static std::random_device rd;
             static std::mt19937 gen(rd());
             static std::uniform_int_distribution<> dis(1, 1000);
 
+            auto attackerId = intent.attackerId;
+            auto targetId = intent.targetId;
             auto& attackerMelee = world.getComponent<domain::Melee>()[attackerId];
             auto& rendingAbilities = world.getComponent<domain::RendingAbility>();
+
+            world.restrictions.modify(attackerId, core::registry::restrictions::MOVE, 1);
+            world.restrictions.modify(attackerId, core::registry::restrictions::ATTACK, 1);
 
             uint32_t damage = attackerMelee.strength;
             if (auto ability = rendingAbilities.find(attackerId); ability != rendingAbilities.end())
