@@ -3,6 +3,7 @@
 #include "Core/World.hpp"
 #include "Features/Domain/Health.hpp"
 #include "Features/Events/UnitAttacked.hpp"
+#include "Features/Intents/DeathIntent.hpp"
 #include "Features/Intents/DamageIntent.hpp"
 
 namespace sw::features::systems::DamageSystem
@@ -20,5 +21,10 @@ namespace sw::features::systems::DamageSystem
 		world.getEvents().event(
 				world.getTick(),
 				events::UnitAttacked{intent.attackerId, intent.targetId, intent.damage, target->second.hp, intent.type});
+
+		if (target->second.hp == 0)
+		{
+			world.pushIntent(std::make_unique<intents::DeathIntent>(intent.targetId));
+		}
 	}
 }
