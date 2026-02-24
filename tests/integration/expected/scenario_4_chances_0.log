@@ -6,32 +6,32 @@
 [0] UNIT_SPAWNED unitId=3 unitType=swordsman x=8 y=4 
 [0] MARCH_STARTED unitId=3 x=8 y=4 targetX=1 targetY=4 
 [1] UNIT_MOVED unitId=1 x=5 y=2 
-[1] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=4 
-[1] UNIT_MOVED unitId=3 x=7 y=4 
-[2] UNIT_MOVED unitId=1 x=5 y=3 
-[2] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=3 
-[2] UNIT_MOVED unitId=3 x=6 y=4 
-[3] UNIT_ATTACKED attackerUnitId=1 targetUnitId=3 damage=2 targetHp=8 
-[3] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=2 
-[3] UNIT_ATTACKED attackerUnitId=3 targetUnitId=1 damage=1 targetHp=1 
-[4] UNIT_ATTACKED attackerUnitId=1 targetUnitId=3 damage=2 targetHp=6 
-[4] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=0 
-[4] UNIT_MOVED unitId=3 x=5 y=4 
-[4] UNIT_DIED unitId=1 
-[5] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=5 
-[5] UNIT_MOVED unitId=3 x=4 y=4 
-[6] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=4 
-[6] UNIT_MOVED unitId=3 x=3 y=4 
-[7] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=3 
-[7] UNIT_MOVED unitId=3 x=2 y=4 
-[8] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=2 
-[8] UNIT_MOVED unitId=3 x=1 y=4 
-[8] MARCH_ENDED unitId=3 x=1 y=4 
-[9] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=1 
-[10] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=0 
-[10] UNIT_DIED unitId=3 
-[11] UNIT_MOVED unitId=2 x=3 y=3 
-[12] UNIT_MOVED unitId=2 x=4 y=4 
-[13] UNIT_MOVED unitId=2 x=5 y=5 
-[14] UNIT_MOVED unitId=2 x=6 y=6 
-[14] MARCH_ENDED unitId=2 x=6 y=6 
+[2] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=4 
+[3] UNIT_MOVED unitId=3 x=7 y=4 
+[4] UNIT_MOVED unitId=1 x=5 y=3 
+[5] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=3 
+[6] UNIT_MOVED unitId=3 x=6 y=4 
+[7] UNIT_ATTACKED attackerUnitId=1 targetUnitId=3 damage=2 targetHp=8 
+[8] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=2 
+[9] UNIT_ATTACKED attackerUnitId=3 targetUnitId=1 damage=1 targetHp=1 
+[10] UNIT_ATTACKED attackerUnitId=1 targetUnitId=3 damage=2 targetHp=6 
+[11] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=0 
+[12] UNIT_MOVED unitId=3 x=5 y=4 
+[13] UNIT_DIED unitId=1 
+[14] UNIT_MOVED unitId=3 x=4 y=4 
+[15] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=5 
+[16] UNIT_MOVED unitId=3 x=3 y=4 
+[17] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=4 
+[18] UNIT_MOVED unitId=3 x=2 y=4 
+[19] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=3 
+[20] UNIT_MOVED unitId=3 x=1 y=4 
+[20] MARCH_ENDED unitId=3 x=1 y=4 
+[21] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=2 
+[23] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=1 
+[25] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=0 
+[26] UNIT_DIED unitId=3 
+[27] UNIT_MOVED unitId=2 x=3 y=3 
+[28] UNIT_MOVED unitId=2 x=4 y=4 
+[29] UNIT_MOVED unitId=2 x=5 y=5 
+[30] UNIT_MOVED unitId=2 x=6 y=6 
+[30] MARCH_ENDED unitId=2 x=6 y=6 

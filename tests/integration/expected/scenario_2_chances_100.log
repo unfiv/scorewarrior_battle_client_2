@@ -4,15 +4,15 @@
 [0] UNIT_SPAWNED unitId=2 unitType=swordsman x=5 y=7 
 [0] MARCH_STARTED unitId=2 x=5 y=7 targetX=5 targetY=5 
 [1] UNIT_MOVED unitId=1 x=5 y=3 
-[1] UNIT_MOVED unitId=2 x=5 y=6 
-[2] UNIT_MOVED unitId=1 x=5 y=4 
-[2] MARCH_ENDED unitId=1 x=5 y=4 
-[2] UNIT_MOVED unitId=2 x=5 y=5 
-[2] MARCH_ENDED unitId=2 x=5 y=5 
-[3] UNIT_ABILITY_USED abilityUnitId=1 abilityName=rending 
-[3] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=5 targetHp=5 
-[3] UNIT_ABILITY_USED abilityUnitId=2 abilityName=rending 
-[3] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=5 targetHp=5 
-[4] UNIT_ABILITY_USED abilityUnitId=1 abilityName=rending 
-[4] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=5 targetHp=0 
-[4] UNIT_DIED unitId=2 
+[2] UNIT_MOVED unitId=2 x=5 y=6 
+[3] UNIT_MOVED unitId=1 x=5 y=4 
+[3] MARCH_ENDED unitId=1 x=5 y=4 
+[4] UNIT_MOVED unitId=2 x=5 y=5 
+[4] MARCH_ENDED unitId=2 x=5 y=5 
+[5] UNIT_ABILITY_USED abilityUnitId=1 abilityName=rending 
+[5] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=5 targetHp=5 
+[6] UNIT_ABILITY_USED abilityUnitId=2 abilityName=rending 
+[6] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=5 targetHp=5 
+[7] UNIT_ABILITY_USED abilityUnitId=1 abilityName=rending 
+[7] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=5 targetHp=0 
+[8] UNIT_DIED unitId=2 
