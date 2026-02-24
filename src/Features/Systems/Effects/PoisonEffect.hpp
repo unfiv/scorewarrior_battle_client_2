@@ -2,7 +2,7 @@
 
 #include "Core/World.hpp"
 #include "Features/Domain/Effects/EffectData.hpp"
-#include "Features/Intents/DamageIntent.hpp"
+#include "Features/Domain/Effects/PendingPoisonDamage.hpp"
 
 #include <any>
 
@@ -32,8 +32,8 @@ namespace sw::features::systems::effects
 
 			if (tickDamage > 0)
 			{
-				world.pushIntent(
-						std::make_unique<intents::DamageIntent>(effect.sourceUnitId, targetId, tickDamage, "poison"));
+				auto& pendingPoisonByTarget = world.getComponent<domain::effects::PendingPoisonDamage>()[targetId];
+				pendingPoisonByTarget[effect.sourceUnitId] += tickDamage;
 			}
 
 			++data.appliedTicks;

@@ -3,6 +3,8 @@
 #include "Core/World.hpp"
 #include "Features/Domain/Effects/EffectData.hpp"
 #include "Features/Domain/Effects/EffectList.hpp"
+#include "Features/Domain/Effects/PendingPoisonDamage.hpp"
+#include "Features/Intents/DamageIntent.hpp"
 #include "Features/Intents/EffectsTickIntent.hpp"
 
 #include <algorithm>
@@ -70,6 +72,21 @@ namespace sw::features::systems
 			if (!hasRending)
 			{
 				rendingMap.erase(targetId);
+			}
+
+			auto& pendingPoison = world.getComponent<domain::effects::PendingPoisonDamage>();
+			auto pendingIt = pendingPoison.find(targetId);
+			if (pendingIt == pendingPoison.end())
+			{
+				return;
+			}
+
+			const auto pendingDamageBySource = pendingIt->second;
+			pendingPoison.erase(pendingIt);
+
+			for (const auto& [sourceId, damage] : pendingDamageBySource)
+			{
+				world.pushIntent(std::make_unique<intents::DamageIntent>(sourceId, targetId, damage, "poison"));
 			}
 		}
 	};

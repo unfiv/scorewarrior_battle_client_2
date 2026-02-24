@@ -5,7 +5,9 @@
 #include "Features/Domain/Effects/EffectFactory.hpp"
 #include "Features/Domain/Effects/EffectImmunity.hpp"
 #include "Features/Domain/Effects/EffectList.hpp"
+#include "Features/Domain/Effects/PendingPoisonDamage.hpp"
 #include "Features/Intents/AddEffectIntent.hpp"
+#include "Features/Intents/DamageIntent.hpp"
 #include "Features/Systems/Effects/PoisonEffect.hpp"
 #include "Features/Systems/Effects/RendingEffect.hpp"
 
@@ -46,6 +48,23 @@ namespace sw::features::systems
 						if (poisonEffect.remainingTicks == 0)
 						{
 							effects.pop_back();
+						}
+
+						auto& pendingPoison = world.getComponent<domain::effects::PendingPoisonDamage>();
+						auto pendingIt = pendingPoison.find(intent.targetId);
+						if (pendingIt != pendingPoison.end())
+						{
+							const auto pendingDamageBySource = pendingIt->second;
+							pendingPoison.erase(pendingIt);
+
+							for (const auto& [sourceId, damage] : pendingDamageBySource)
+							{
+								world.pushIntent(std::make_unique<intents::DamageIntent>(
+										sourceId,
+										intent.targetId,
+										damage,
+										"poison"));
+							}
 						}
 					}
 					break;
