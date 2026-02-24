@@ -5,6 +5,7 @@
 #include "Core/Pipeline/IntentResolver.hpp"
 
 #include <any>
+#include <cstddef>
 #include <typeindex>
 #include <unordered_map>
 
@@ -78,6 +79,7 @@ namespace sw::core
 
 	private:
 		uint32_t tick{0};
+		size_t nextUnitCursor{0};
 
 		io::EventSystem& eventSystem;
 

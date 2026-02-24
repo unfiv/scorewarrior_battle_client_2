@@ -22,7 +22,6 @@ namespace sw::core
 	{
 		++tick;
 
-		auto ids = creationOrder;
 		auto hasPosition = [this](uint32_t id)
 		{
 			const auto& positions = getComponent<domain::Position>();
@@ -52,35 +51,42 @@ namespace sw::core
 			}
 		};
 
-		for (uint32_t id : ids)
+		if (creationOrder.empty())
 		{
-			// `ids` is a snapshot from the tick start. A unit can die and be removed
-			// from components while this tick is still executing, so we must skip stale ids.
+			nextUnitCursor = 0;
+			return;
+		}
+
+		nextUnitCursor %= creationOrder.size();
+
+		for (size_t step = 0; step < creationOrder.size(); ++step)
+		{
+			const size_t index = (nextUnitCursor + step) % creationOrder.size();
+			const uint32_t id = creationOrder[index];
+
+			// The round-robin cursor advances through creation order,
+			// skipping units that are no longer alive.
 			if (!hasPosition(id))
 			{
 				continue;
 			}
+
+			nextUnitCursor = (index + 1) % creationOrder.size();
 
 			executeChain(id, tickSystemOrder, false);
 
 			auto chainIt = intentsChains.find(id);
-			if (chainIt == intentsChains.end())
+			if (chainIt != intentsChains.end())
 			{
-				continue;
-			}
-
-			executeChain(id, chainIt->second.get(), true);
-		}
-
-		for (uint32_t id : ids)
-		{
-			if (!hasPosition(id))
-			{
-				continue;
+				executeChain(id, chainIt->second.get(), true);
 			}
 
 			executeChain(id, postTickSystemOrder, false);
+			return;
 		}
+
+		// No active units left in creation order.
+		nextUnitCursor = 0;
 	}
 
 	io::EventSystem& World::getEvents()
