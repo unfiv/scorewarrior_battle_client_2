@@ -6,25 +6,25 @@
 [1] UNIT_MOVED unitId=1 x=5 y=3 
 [2] UNIT_MOVED unitId=2 x=6 y=5 
 [3] UNIT_MOVED unitId=1 x=5 y=4 
-[4] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=9 
-[5] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=9 
-[6] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=8 
-[7] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=8 
-[8] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=7 
-[9] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=7 
-[10] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=6 
-[11] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=6 
-[12] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=5 
-[13] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=5 
-[14] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=4 
-[15] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=4 
-[16] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=3 
-[17] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=3 
-[18] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=2 
-[19] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=2 
-[20] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=1 
-[21] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=1 
-[22] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=0 
+[4] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=9 attackType=melee 
+[5] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=9 attackType=melee 
+[6] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=8 attackType=melee 
+[7] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=8 attackType=melee 
+[8] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=7 attackType=melee 
+[9] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=7 attackType=melee 
+[10] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=6 attackType=melee 
+[11] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=6 attackType=melee 
+[12] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=5 attackType=melee 
+[13] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=5 attackType=melee 
+[14] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=4 attackType=melee 
+[15] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=4 attackType=melee 
+[16] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=3 attackType=melee 
+[17] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=3 attackType=melee 
+[18] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=2 attackType=melee 
+[19] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=2 attackType=melee 
+[20] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=1 attackType=melee 
+[21] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=1 attackType=melee 
+[22] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=0 attackType=melee 
 [23] UNIT_DIED unitId=1 
 [24] UNIT_MOVED unitId=2 x=5 y=5 
 [25] UNIT_MOVED unitId=2 x=4 y=5 

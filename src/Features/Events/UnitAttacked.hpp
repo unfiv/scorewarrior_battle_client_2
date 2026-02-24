@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
 namespace sw::features::events
 {
@@ -12,6 +13,7 @@ namespace sw::features::events
 		uint32_t targetUnitId{};
 		uint32_t damage{};
 		uint32_t targetHp{};
+		std::string attackType{};
 
 		template <typename Visitor>
 		void visit(Visitor& visitor)
@@ -20,6 +22,7 @@ namespace sw::features::events
 			visitor.visit("targetUnitId", targetUnitId);
 			visitor.visit("damage", damage);
 			visitor.visit("targetHp", targetHp);
+			visitor.visit("attackType", attackType);
 		}
 	};
 }

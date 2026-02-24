@@ -117,7 +117,7 @@ namespace sw::features::systems
 					world.pushIntent(
 							std::make_unique<intents::AddEffectIntent>(
 									attackerId, targetId, intents::EffectType::Poison, 5, ability->second.poison));
-					world.getEvents().event(world.getTick(), events::UnitAbilityUsed{attackerId, "poison"});
+					world.getEvents().event(world.getTick(), events::UnitAbilityUsed{attackerId, targetId, "poison"});
 					damage = 0;
 				}
 			}

@@ -14,6 +14,7 @@
 #include "Features/Systems/MarchSystem.hpp"
 
 #include <random>
+#include <string>
 #include <vector>
 
 namespace sw::features::systems
@@ -77,19 +78,21 @@ namespace sw::features::systems
 			auto& rendingAbilities = world.getComponent<domain::RendingAbility>();
 
 			uint32_t damage = attackerMelee.strength;
+			std::string attackType = "melee";
 			if (auto ability = rendingAbilities.find(attackerId); ability != rendingAbilities.end())
 			{
 				if (dis(gen) <= ability->second.chance)
 				{
 					damage = ability->second.rending;
+					attackType = "rending";
 					world.pushIntent(
 							std::make_unique<intents::AddEffectIntent>(
 									attackerId, targetId, intents::EffectType::Rending, 1, 0));
-					world.getEvents().event(world.getTick(), events::UnitAbilityUsed{attackerId, "rending"});
+					world.getEvents().event(world.getTick(), events::UnitAbilityUsed{attackerId, targetId, "rending"});
 				}
 			}
 
-			world.pushIntent(std::make_unique<intents::DamageIntent>(attackerId, targetId, damage, "melee"));
+			world.pushIntent(std::make_unique<intents::DamageIntent>(attackerId, targetId, damage, attackType));
 		}
 	};
 }

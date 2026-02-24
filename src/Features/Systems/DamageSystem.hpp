@@ -19,6 +19,6 @@ namespace sw::features::systems::DamageSystem
 		target->second.hp = (target->second.hp > intent.damage) ? (target->second.hp - intent.damage) : 0;
 		world.getEvents().event(
 				world.getTick(),
-				events::UnitAttacked{intent.attackerId, intent.targetId, intent.damage, target->second.hp});
+				events::UnitAttacked{intent.attackerId, intent.targetId, intent.damage, target->second.hp, intent.type});
 	}
 }
