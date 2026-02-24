@@ -17,13 +17,13 @@ namespace sw::features::systems
 	class Death
 	{
 	public:
-		static std::shared_ptr<intents::DeathIntent> plan(core::World& world, uint32_t id)
+		static std::unique_ptr<intents::DeathIntent> plan(core::World& world, uint32_t id)
 		{
 			auto& healthMap = world.getComponent<domain::Health>();
 			auto health = healthMap.find(id);
 			if (health != healthMap.end() && health->second.hp == 0)
 			{
-				return std::make_shared<intents::DeathIntent>(id);
+				return std::make_unique<intents::DeathIntent>(id);
 			}
 
 			return nullptr;

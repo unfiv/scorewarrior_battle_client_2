@@ -2,18 +2,19 @@
 #include "IntentResolver.hpp"
 
 #include <cassert>
+#include <utility>
 
 namespace sw::core::pipeline
 {
-	bool IntentResolver::resolve(World& world, std::shared_ptr<pipeline::Intent> intent)
+	bool IntentResolver::resolve(World& world, std::unique_ptr<pipeline::Intent> intent)
 	{
-		std::queue<std::shared_ptr<Intent>> intentQueue;
-		intentQueue.push(intent);
+		std::queue<std::unique_ptr<Intent>> intentQueue;
+		intentQueue.push(std::move(intent));
 
 		bool executed = false;
 		while (!intentQueue.empty())
 		{
-			auto current = intentQueue.front();
+			auto current = std::move(intentQueue.front());
 			intentQueue.pop();
 
 			auto it = registry.find(std::type_index(typeid(*current)));

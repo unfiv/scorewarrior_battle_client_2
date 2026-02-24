@@ -24,7 +24,7 @@ namespace sw::features::systems
 	class RangedAttack
 	{
 	public:
-		static std::shared_ptr<intents::RangedAttackIntent> plan(core::World& world, uint32_t attackerId)
+		static std::unique_ptr<intents::RangedAttackIntent> plan(core::World& world, uint32_t attackerId)
 		{
 			auto& healthMap = world.getComponent<domain::Health>();
 			auto& rangedMap = world.getComponent<domain::Ranged>();
@@ -95,7 +95,7 @@ namespace sw::features::systems
 			std::uniform_int_distribution<size_t> targetDistribution(0, targets.size() - 1);
 			uint32_t targetId = targets[targetDistribution(gen)];
 
-			return std::make_shared<intents::RangedAttackIntent>(attackerId, targetId);
+			return std::make_unique<intents::RangedAttackIntent>(attackerId, targetId);
 		}
 
 		static void execute(core::World& world, intents::RangedAttackIntent& intent)
@@ -115,7 +115,7 @@ namespace sw::features::systems
 				if (dis(gen) <= ability->second.chance)
 				{
 					world.pushIntent(
-							std::make_shared<intents::AddEffectIntent>(
+							std::make_unique<intents::AddEffectIntent>(
 									attackerId, targetId, intents::EffectType::Poison, 5, ability->second.poison));
 					world.getEvents().event(world.getTick(), events::UnitAbilityUsed{attackerId, "poison"});
 					damage = 0;
@@ -124,7 +124,7 @@ namespace sw::features::systems
 
 			if (damage > 0)
 			{
-				world.pushIntent(std::make_shared<intents::DamageIntent>(attackerId, targetId, damage, "ranged"));
+				world.pushIntent(std::make_unique<intents::DamageIntent>(attackerId, targetId, damage, "ranged"));
 			}
 		}
 

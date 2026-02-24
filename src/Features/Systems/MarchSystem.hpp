@@ -157,7 +157,7 @@ namespace sw::features::systems::MarchSystem
 		return next;
 	}
 
-	static std::shared_ptr<intents::MarchIntent> plan(core::World& world, uint32_t unitId)
+	static std::unique_ptr<intents::MarchIntent> plan(core::World& world, uint32_t unitId)
 	{
 		auto& targets = world.getComponent<domain::MarchTarget>();
 		auto targetIt = targets.find(unitId);
@@ -183,7 +183,7 @@ namespace sw::features::systems::MarchSystem
 
 		if (isPassable(world, unitId, nextPos))
 		{
-			return std::make_shared<intents::MarchIntent>(unitId, currentPos, nextPos);
+			return std::make_unique<intents::MarchIntent>(unitId, currentPos, nextPos);
 		}
 
 		return nullptr;

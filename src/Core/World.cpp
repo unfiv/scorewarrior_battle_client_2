@@ -4,6 +4,7 @@
 
 #include <array>
 #include <span>
+#include <utility>
 
 namespace sw::core
 {
@@ -44,7 +45,7 @@ namespace sw::core
 					continue;
 				}
 
-				if (resolver.resolve(*this, intent) && stopOnSuccess)
+				if (resolver.resolve(*this, std::move(intent)) && stopOnSuccess)
 				{
 					break;
 				}
@@ -144,8 +145,8 @@ namespace sw::core
 		}
 	}
 
-	void World::pushIntent(std::shared_ptr<pipeline::Intent> intent)
+	void World::pushIntent(std::unique_ptr<pipeline::Intent> intent)
 	{
-		resolver.resolve(*this, intent);
+		resolver.resolve(*this, std::move(intent));
 	}
 }

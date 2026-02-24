@@ -33,7 +33,7 @@ namespace sw::features::systems::effects
 			if (tickDamage > 0)
 			{
 				world.pushIntent(
-						std::make_shared<intents::DamageIntent>(effect.sourceUnitId, targetId, tickDamage, "poison"));
+						std::make_unique<intents::DamageIntent>(effect.sourceUnitId, targetId, tickDamage, "poison"));
 			}
 
 			++data.appliedTicks;

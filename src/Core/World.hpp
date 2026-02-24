@@ -28,7 +28,7 @@ namespace sw::core
 		bool isGameOver();
 		
 		void removeAllComponents(uint32_t id);
-		void pushIntent(std::shared_ptr<pipeline::Intent> intent);
+		void pushIntent(std::unique_ptr<pipeline::Intent> intent);
 
 		template <typename TIntent>
 		void registerTickSystem(bool postAction = false)

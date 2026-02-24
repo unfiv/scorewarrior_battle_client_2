@@ -18,7 +18,7 @@ namespace sw::core::pipeline
 	class IntentResolver
 	{
 		using Handler = std::function<void(World&, pipeline::Intent&)>;
-		using Planner = std::function<std::shared_ptr<Intent>(World&, uint32_t)>;
+		using Planner = std::function<std::unique_ptr<Intent>(World&, uint32_t)>;
 
 		template <typename T>
 		using IntentFunc = std::function<void(World&, T&)>;
@@ -41,13 +41,13 @@ namespace sw::core::pipeline
 		}
 
 		bool resolve(World& world);
-		bool resolve(World& world, std::shared_ptr<Intent> intent);
+		bool resolve(World& world, std::unique_ptr<Intent> intent);
 
 		template <typename TIntent>
-		void setPlanner(std::function<std::shared_ptr<TIntent>(World&, uint32_t)> func)
+		void setPlanner(std::function<std::unique_ptr<TIntent>(World&, uint32_t)> func)
 		{
 			registry[std::type_index(typeid(TIntent))].planner
-					= [func](World& w, uint32_t id) -> std::shared_ptr<Intent>
+					= [func](World& w, uint32_t id) -> std::unique_ptr<Intent>
 			{
 				return func(w, id);
 			};

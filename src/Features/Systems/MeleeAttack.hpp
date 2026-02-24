@@ -21,7 +21,7 @@ namespace sw::features::systems
 	class MeleeAttack
 	{
 	public:
-		static std::shared_ptr<intents::MeleeAttackIntent> plan(core::World& world, uint32_t attackerId)
+		static std::unique_ptr<intents::MeleeAttackIntent> plan(core::World& world, uint32_t attackerId)
 		{
 			auto& healthMap = world.getComponent<domain::Health>();
 			auto& meleeMap = world.getComponent<domain::Melee>();
@@ -62,7 +62,7 @@ namespace sw::features::systems
 			std::uniform_int_distribution<size_t> targetDistribution(0, aliveTargets.size() - 1);
 			uint32_t targetId = aliveTargets[targetDistribution(gen)];
 
-			return std::make_shared<intents::MeleeAttackIntent>(attackerId, targetId);
+			return std::make_unique<intents::MeleeAttackIntent>(attackerId, targetId);
 		}
 
 		static void execute(core::World& world, intents::MeleeAttackIntent& intent)
@@ -83,13 +83,13 @@ namespace sw::features::systems
 				{
 					damage = ability->second.rending;
 					world.pushIntent(
-							std::make_shared<intents::AddEffectIntent>(
+							std::make_unique<intents::AddEffectIntent>(
 									attackerId, targetId, intents::EffectType::Rending, 1, 0));
 					world.getEvents().event(world.getTick(), events::UnitAbilityUsed{attackerId, "rending"});
 				}
 			}
 
-			world.pushIntent(std::make_shared<intents::DamageIntent>(attackerId, targetId, damage, "melee"));
+			world.pushIntent(std::make_unique<intents::DamageIntent>(attackerId, targetId, damage, "melee"));
 		}
 	};
 }

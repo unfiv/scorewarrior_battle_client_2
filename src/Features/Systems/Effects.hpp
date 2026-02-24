@@ -12,7 +12,7 @@ namespace sw::features::systems
 	class Effects
 	{
 	public:
-		static std::shared_ptr<intents::EffectsTickIntent> plan(core::World& world, uint32_t targetId)
+		static std::unique_ptr<intents::EffectsTickIntent> plan(core::World& world, uint32_t targetId)
 		{
 			auto& effectMap = world.getComponent<domain::effects::EffectList>();
 
@@ -22,7 +22,7 @@ namespace sw::features::systems
 				return nullptr;
 			}
 
-			return std::make_shared<intents::EffectsTickIntent>(targetId);
+			return std::make_unique<intents::EffectsTickIntent>(targetId);
 		}
 
 		static void execute(core::World& world, intents::EffectsTickIntent& intent)
