@@ -26,8 +26,8 @@
 [21] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=1 targetHp=1 attackType=melee 
 [22] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=0 attackType=melee 
 [23] UNIT_DIED unitId=1 
-[24] UNIT_MOVED unitId=2 x=5 y=5 
-[25] UNIT_MOVED unitId=2 x=4 y=5 
-[26] UNIT_MOVED unitId=2 x=3 y=5 
-[27] UNIT_MOVED unitId=2 x=2 y=5 
-[27] MARCH_ENDED unitId=2 x=2 y=5 
+[23] UNIT_MOVED unitId=2 x=5 y=5 
+[24] UNIT_MOVED unitId=2 x=4 y=5 
+[25] UNIT_MOVED unitId=2 x=3 y=5 
+[26] UNIT_MOVED unitId=2 x=2 y=5 
+[26] MARCH_ENDED unitId=2 x=2 y=5 

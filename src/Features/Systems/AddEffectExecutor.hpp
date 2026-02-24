@@ -33,6 +33,21 @@ namespace sw::features::systems
 									intent.duration,
 									intent.sourceId,
 									effects::PoisonEffect::apply));
+
+					// Poison starts ticking immediately on application.
+					if (!effects.empty())
+					{
+						auto& poisonEffect = effects.back();
+						poisonEffect.applyFn(world, intent.targetId, poisonEffect);
+						if (poisonEffect.remainingTicks > 0)
+						{
+							--poisonEffect.remainingTicks;
+						}
+						if (poisonEffect.remainingTicks == 0)
+						{
+							effects.pop_back();
+						}
+					}
 					break;
 				case intents::EffectType::Rending:
 					effects.push_back(

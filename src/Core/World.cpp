@@ -57,6 +57,16 @@ namespace sw::core
 			return;
 		}
 
+		for (uint32_t id : creationOrder)
+		{
+			if (!hasPosition(id))
+			{
+				continue;
+			}
+
+			executeChain(id, tickSystemOrder, false);
+		}
+
 		nextUnitCursor %= creationOrder.size();
 
 		for (size_t step = 0; step < creationOrder.size(); ++step)
@@ -72,8 +82,6 @@ namespace sw::core
 			}
 
 			nextUnitCursor = (index + 1) % creationOrder.size();
-
-			executeChain(id, tickSystemOrder, false);
 
 			auto chainIt = intentsChains.find(id);
 			if (chainIt != intentsChains.end())

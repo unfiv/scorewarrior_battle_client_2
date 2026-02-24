@@ -6,35 +6,34 @@
 [0] UNIT_SPAWNED unitId=3 unitType=swordsman x=8 y=4 
 [0] MARCH_STARTED unitId=3 x=8 y=4 targetX=1 targetY=4 
 [1] UNIT_MOVED unitId=1 x=5 y=2 
+[2] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=4 attackType=poison 
 [2] UNIT_ABILITY_USED abilityUnitId=2 targetUnitId=1 abilityName=poison 
+[3] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=3 attackType=poison 
 [3] UNIT_MOVED unitId=3 x=7 y=4 
-[4] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=4 attackType=poison 
+[4] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=2 attackType=poison 
 [4] UNIT_MOVED unitId=1 x=5 y=3 
+[5] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=1 attackType=poison 
+[5] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=0 attackType=poison 
 [5] UNIT_ABILITY_USED abilityUnitId=2 targetUnitId=1 abilityName=poison 
-[6] UNIT_MOVED unitId=3 x=6 y=4 
-[7] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=3 attackType=poison 
-[7] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=2 attackType=poison 
-[7] UNIT_ABILITY_USED abilityUnitId=1 targetUnitId=3 abilityName=rending 
-[7] UNIT_ATTACKED attackerUnitId=1 targetUnitId=3 damage=4 targetHp=6 attackType=rending 
-[8] UNIT_ABILITY_USED abilityUnitId=2 targetUnitId=1 abilityName=poison 
-[9] UNIT_ABILITY_USED abilityUnitId=3 targetUnitId=1 abilityName=rending 
-[9] UNIT_ATTACKED attackerUnitId=3 targetUnitId=1 damage=2 targetHp=0 attackType=rending 
-[10] UNIT_DIED unitId=1 
-[11] UNIT_MOVED unitId=3 x=5 y=4 
-[12] UNIT_ABILITY_USED abilityUnitId=2 targetUnitId=3 abilityName=poison 
-[13] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=5 attackType=poison 
-[13] UNIT_MOVED unitId=3 x=4 y=4 
-[14] UNIT_ABILITY_USED abilityUnitId=2 targetUnitId=3 abilityName=poison 
-[15] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=4 attackType=poison 
-[15] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=3 attackType=poison 
-[15] UNIT_MOVED unitId=3 x=3 y=4 
-[16] UNIT_ABILITY_USED abilityUnitId=2 targetUnitId=3 abilityName=poison 
-[17] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=2 attackType=poison 
-[17] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=1 attackType=poison 
-[17] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=0 attackType=poison 
-[17] UNIT_DIED unitId=3 
-[18] UNIT_MOVED unitId=2 x=3 y=3 
-[19] UNIT_MOVED unitId=2 x=4 y=4 
-[20] UNIT_MOVED unitId=2 x=5 y=5 
-[21] UNIT_MOVED unitId=2 x=6 y=6 
-[21] MARCH_ENDED unitId=2 x=6 y=6 
+[6] UNIT_DIED unitId=1 
+[6] UNIT_MOVED unitId=2 x=3 y=3 
+[7] UNIT_MOVED unitId=3 x=6 y=4 
+[8] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=9 attackType=poison 
+[8] UNIT_ABILITY_USED abilityUnitId=2 targetUnitId=3 abilityName=poison 
+[9] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=8 attackType=poison 
+[9] UNIT_MOVED unitId=3 x=5 y=4 
+[10] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=7 attackType=poison 
+[10] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=6 attackType=poison 
+[10] UNIT_ABILITY_USED abilityUnitId=2 targetUnitId=3 abilityName=poison 
+[11] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=5 attackType=poison 
+[11] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=4 attackType=poison 
+[11] UNIT_MOVED unitId=3 x=4 y=4 
+[12] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=3 attackType=poison 
+[12] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=2 attackType=poison 
+[12] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=1 attackType=melee 
+[13] UNIT_ATTACKED attackerUnitId=2 targetUnitId=3 damage=1 targetHp=0 attackType=poison 
+[13] UNIT_DIED unitId=3 
+[13] UNIT_MOVED unitId=2 x=4 y=4 
+[14] UNIT_MOVED unitId=2 x=5 y=5 
+[15] UNIT_MOVED unitId=2 x=6 y=6 
+[15] MARCH_ENDED unitId=2 x=6 y=6 
