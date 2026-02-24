@@ -12,7 +12,7 @@
 [5] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=5 targetHp=5 attackType=rending 
 [6] UNIT_ABILITY_USED abilityUnitId=2 targetUnitId=1 abilityName=rending 
 [6] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=5 targetHp=0 attackType=rending 
-[7] UNIT_DIED unitId=1 
+[6] UNIT_DIED unitId=1 
 [7] UNIT_MOVED unitId=2 x=5 y=5 
 [8] UNIT_MOVED unitId=2 x=4 y=5 
 [9] UNIT_MOVED unitId=2 x=3 y=5 
