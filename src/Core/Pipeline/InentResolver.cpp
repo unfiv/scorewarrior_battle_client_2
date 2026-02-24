@@ -5,8 +5,11 @@
 
 namespace sw::core::pipeline
 {
-	bool IntentResolver::resolve(World& world)
+	bool IntentResolver::resolve(World& world, std::shared_ptr<pipeline::Intent> intent)
 	{
+		std::queue<std::shared_ptr<Intent>> intentQueue;
+		intentQueue.push(intent);
+
 		bool executed = false;
 		while (!intentQueue.empty())
 		{
@@ -44,11 +47,5 @@ namespace sw::core::pipeline
 		}
 
 		return executed;
-	}
-
-	bool IntentResolver::resolve(World& world, std::shared_ptr<pipeline::Intent> intent)
-	{
-		emit(intent);
-		return resolve(world);
 	}
 }

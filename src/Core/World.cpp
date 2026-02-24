@@ -7,6 +7,16 @@
 
 namespace sw::core
 {
+	World::World(io::EventSystem& events)
+		: eventSystem(events)
+	{
+	}
+
+	uint32_t World::getTick() const
+	{
+		return tick;
+	}
+
 	void World::nextTick()
 	{
 		++tick;
@@ -72,6 +82,11 @@ namespace sw::core
 		}
 	}
 
+	io::EventSystem& World::getEvents()
+	{
+		return eventSystem;
+	}
+
 	bool World::isGameOver()
 	{
 		auto hasPosition = [this](uint32_t id)
@@ -119,5 +134,18 @@ namespace sw::core
 		}
 
 		return true;
+	}
+
+	void World::removeAllComponents(uint32_t id)
+	{
+		for (auto& clean : componentCleaners)
+		{
+			clean(id);
+		}
+	}
+
+	void World::pushIntent(std::shared_ptr<pipeline::Intent> intent)
+	{
+		resolver.resolve(*this, intent);
 	}
 }

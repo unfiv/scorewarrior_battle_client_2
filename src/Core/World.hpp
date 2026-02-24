@@ -18,35 +18,17 @@ namespace sw::core
 	class World
 	{
 	public:
-		explicit World(io::EventSystem& events) :
-				eventSystem(events)
-		{}
+		explicit World(io::EventSystem& events);
 
-		uint32_t getTick() const
-		{
-			return tick;
-		}
+		io::EventSystem& getEvents();
 
+		uint32_t getTick() const;
 		void nextTick();
 
-		io::EventSystem& getEvents()
-		{
-			return eventSystem;
-		}
-
-		domain::Map map{0, 0};
-		pipeline::IntentResolver resolver;
-
-		std::unordered_map<uint32_t, pipeline::IntentChain> intentsChains;
-
-		std::vector<uint32_t> creationOrder;
-		std::vector<std::type_index> tickSystemOrder;
-		std::vector<std::type_index> postTickSystemOrder;
-
-		void pushIntent(std::shared_ptr<pipeline::Intent> intent)
-		{
-			resolver.resolve(*this, intent);
-		}
+		bool isGameOver();
+		
+		void removeAllComponents(uint32_t id);
+		void pushIntent(std::shared_ptr<pipeline::Intent> intent);
 
 		template <typename TIntent>
 		void registerTickSystem(bool postAction = false)
@@ -85,24 +67,20 @@ namespace sw::core
 			return std::any_cast<std::unordered_map<uint32_t, T>&>(storage);
 		}
 
-		void removeAllComponents(uint32_t id)
-		{
-			for (auto& clean : componentCleaners)
-			{
-				clean(id);
-			}
-		}
+		domain::Map map{0, 0};
+		pipeline::IntentResolver resolver;
+		std::vector<uint32_t> creationOrder;
 
-		pipeline::IntentChain& getIntentsChain(uint32_t id)
-		{
-			return intentsChains[id];
-		}
-
-		bool isGameOver();
+		std::unordered_map<uint32_t, pipeline::IntentChain> intentsChains;
+		
+		std::vector<std::type_index> tickSystemOrder;
+		std::vector<std::type_index> postTickSystemOrder;
 
 	private:
 		uint32_t tick{0};
+
 		io::EventSystem& eventSystem;
+
 		std::unordered_map<std::type_index, std::any> components;
 		std::vector<std::function<void(uint32_t)>> componentCleaners;
 	};

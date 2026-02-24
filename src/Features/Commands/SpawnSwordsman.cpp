@@ -34,7 +34,7 @@ namespace sw::features::commands
 					world.getComponent<domain::RangedAttackable>()[unitId];
 					world.getComponent<domain::RendingAbility>()[unitId] = {chance, rending};
 
-					world.getIntentsChain(unitId).add<intents::MeleeAttackIntent>().add<intents::MarchIntent>();
+					world.intentsChains[unitId].add<intents::MeleeAttackIntent>().add<intents::MarchIntent>();
 				});
 	}
 }

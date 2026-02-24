@@ -37,7 +37,7 @@ namespace sw::features::commands
 					world.getComponent<domain::RangedAttackable>()[unitId];
 					world.getComponent<domain::PoisonAbility>()[unitId] = {chance, poison};
 
-					world.getIntentsChain(unitId)
+					world.intentsChains[unitId]
 							.add<intents::RangedAttackIntent>()
 							.add<intents::MeleeAttackIntent>()
 							.add<intents::MarchIntent>();

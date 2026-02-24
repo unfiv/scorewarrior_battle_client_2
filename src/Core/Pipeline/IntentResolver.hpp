@@ -79,14 +79,5 @@ namespace sw::core::pipeline
 				hooks.pre.push_back(wrapper);
 			}
 		}
-
-		void emit(std::shared_ptr<Intent> intent)
-		{
-			intentQueue.push(intent);
-		}
-
-	private:
-		// TODO: should we store data?
-		std::queue<std::shared_ptr<Intent>> intentQueue;
 	};
 }
